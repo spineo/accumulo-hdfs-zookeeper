@@ -30,6 +30,17 @@ sudo mkdir -p /data/zookeeper
 sudo chown zookeeper:zookeeper /data/zookeeper
 ```
 
+We will now download/install the binary in the same location where we installed Hadoop (i.e., /var/applications) and will use the latest stable release from https://zookeeper.apache.org/releases.html#download by running below commands:
+```
+cd /var/applications
+sudo su
+wget https://downloads.apache.org/zookeeper/zookeeper-3.6.0/apache-zookeeper-3.6.0-bin.tar.gz
+tar -xvf apache-zookeeper-3.6.0-bin.tar.gz
+chown -R zookeeper:zookeeper apache-zookeeper-3.6.0-bin
+ln -s apache-zookeeper-3.6.0-bin zookeeper
+chown -h zookeeper:zookeeper zookeeper
+```
+
 ### Set up the Zookeeper Cluster
 
 ## Install/Configure Accumulo
