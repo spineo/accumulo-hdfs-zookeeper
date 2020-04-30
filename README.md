@@ -43,6 +43,8 @@ ln -s apache-zookeeper-3.6.0-bin zookeeper
 chown -h zookeeper:zookeeper zookeeper
 ```
 
+If all goes well, remove the installation binary: _rm apache-zookeeper-3.6.0-bin.tar.gz_
+
 Finally, we will confirm that our _java_ dependency being used is the correct one:
 ```
 [zookeeper@ip-xxx-xxx-xxx-xxx zookeeper]$ java -version
@@ -205,6 +207,17 @@ We will now be following the preceding installation and configuration steps on t
 On the _EC2 Dashboard_ click on _Security groups_ and then the _Create security group_ button. Give it the name "Zookeeper" and will make it a _Custom TCP_ on outbound traffic with port range _2888-3888_ (you can also create two separate security groups for each specific port)
 
 Go back to the _Running instances_ dashboard, select each of our instances in turn, and navigate to _Actions -> Networking -> Change Security Groups_, select the security group just created, and click on _Assign Security Groups_
+
+### Edit the Configuration
+
+Once we get to the section where we edit the _zoo.cfg_ file, we will add the below three lines to all of them (including the main node one). The server value can be the public DNS or IP.
+```
+server.1=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
+server.2=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
+server.3=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888  
+```
+
+Then on each node create a $ZOOKEEPER_HOME/myid file containing the server number associated with that node (i.e., on server.1 node the myid file would contain the number _1_).
 
 ## Install/Configure Accumulo
 
