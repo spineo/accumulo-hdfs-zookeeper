@@ -10,11 +10,12 @@ In the second part of the project we will develop a simple Java client to intera
 
 In the AWS console we will be selecting the _HadoopMainNode_ and then go to _Actions -> Instance Settings -> Change Instance Type_, select _t2.medium_, and click "Apply" (once we get ready to set up the applications on the remaining nodes we can similarly apply this action to the _HadoopDataNode1_ and _HadoopDataNode2_ instances). Note that the instance(s) must be stopped first before applying this action (I would generally recommend that instances be stopped when not in use as AWS charges can quickly skyrocket!)
 
-## Install/Configure Zookeeper
+## Install/Configure Zookeeper on the Main Node
 
 We will start out by installing, configuring, and testing Zookeeper on the _HadoopMainNode_ and then complete the installation/configuration to include the remaining two nodes.
 
-### Install/Configure Zookeeper on the Main Node
+
+### Set up the User and Deploy the Application
 
 Log into the main node and as _ec2-user_ (or any user with _sudo_ privileges) run the below commands to setup our 
 _zookeeper_ user:
@@ -41,7 +42,40 @@ ln -s apache-zookeeper-3.6.0-bin zookeeper
 chown -h zookeeper:zookeeper zookeeper
 ```
 
-### Set up the Zookeeper Cluster
+### Configure the Application
+
+Run the below commands as user _zookeeper_ (you can first run _export ZOOKEEPER_HOME=/var/applications/zookeeper_ or add this statement to your ~/.bashrc)
+```
+cd $ZOOKEEPER_HOME/conf
+cp zoo_sample.cfg zoo.cfg
+```
+and edit the _zoo.cfg_ file to include the below parameters (all except _dataDir_ are likely default):
+```
+# The number of milliseconds of each tick
+tickTime=2000
+
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit=10
+
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit=5
+
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+dataDir=/data/zookeeper
+
+# the port at which the clients will connect
+clientPort=2181
+
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+```
+
+## Set up the Zookeeper Cluster
 
 ## Install/Configure Accumulo
 
@@ -49,4 +83,3 @@ chown -h zookeeper:zookeeper zookeeper
 
 
 ## References
-
