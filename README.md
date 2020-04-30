@@ -147,7 +147,7 @@ Using config: /var/applications/zookeeper/bin/../conf/zoo.cfg
 Stopping zookeeper ... STOPPED
 ```
 
-## Setting up _systemd_
+## Setting up _systemd_ (Optional)
 
 Create a new file _/etc/systemd/system/zookeeper.service_ with the below contents:
 ```
@@ -219,7 +219,49 @@ server.3=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
 
 Then on each node create a _/data/zookeeper/myid_ file containing the server number associated with that node (i.e., on server.1 node the myid file would contain the number _1_).
 
+### Start up Each Node
+
+As before, if you have _systemd_ set up on the remaining nodes you can use _systemctl start zookeeper_ but if not:
+```
+sudo su zookeeper
+cd $ZOOKEEPER_HOME
+./bin/zkServer.sh start
+```
+
+### Test Connecting to Other Nodes
+As before, we can use the CLI to test connectivity on other nodes by specifying the Public DNS (or IP) and configured port number:
+```
+./bin/zkCli.sh -server ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181
+```
+
+### Test Operational Status of the Cluster
+To check the operational status of the cluster, we can determine first which of the three nodes is the _leader_ and which are _followers_. If leader, you will get the following status when running the below command:
+```
+[zookeeper@ip-xxx-xxx-xxx-xxx zookeeper]$  ./bin/zkServer.sh status
+/bin/java
+ZooKeeper JMX enabled by default
+Using config: /var/applications/zookeeper/bin/../conf/zoo.cfg
+Client port found: 2181. Client address: localhost.
+Mode: leader
+```
+Similarly, if follower you will see _Mode: follower_ in the output.
+
+The below command and output executed from the leader node can be used to confirm whether the leader is syncing with  followers:
+```
+[zookeeper@ip-xxx-xxx-xxx-xxx zookeeper]$ echo mntr | nc localhost 2181 | grep followers
+zk_synced_followers	2
+zk_synced_non_voting_followers	0
+```
+
+A couple of things you might need to do on the leader node before you run the above command:
+* Run _yum install nc_ (as _root_ user or _sudo_) if application is not pre-installed
+* You will need to restart the zookeeper daemon by passing it a JVM argument. This can be done as shown below:
+```
+SERVER_JVMFLAGS=-Dzookeeper.4lw.commands.whitelist=mntr ./bin/zkServer.sh restart
+```
+
 ## Install/Configure Accumulo
+
 
 ## Run the Test Application
 
