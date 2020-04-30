@@ -217,7 +217,7 @@ server.2=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
 server.3=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888  
 ```
 
-Then on each node create a $ZOOKEEPER_HOME/myid file containing the server number associated with that node (i.e., on server.1 node the myid file would contain the number _1_).
+Then on each node create a _/data/zookeeper/myid_ file containing the server number associated with that node (i.e., on server.1 node the myid file would contain the number _1_).
 
 ## Install/Configure Accumulo
 
