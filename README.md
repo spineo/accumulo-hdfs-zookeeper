@@ -194,7 +194,17 @@ Finally, run command to enable startup on boot:
 Created symlink from /etc/systemd/system/default.target.wants/zookeeper.service to /etc/systemd/system/zookeeper.service.
 ```
 
+and try _systemctl stop zookeeper_ followed by _systemctl restart zookeeper_ (and check status one more time)
+
 ## Set up the Zookeeper Cluster
+
+We will now be following the preceding installation and configuration steps on the two remaining cluster nodes (_HadoopDataNode1_ and _HadoopDataNode2_) but before we get started, we will ensure that our instances type have been changed to _t2.medium_, we will need to open a couple of ports used in the communication between nodes, and of course, start the instances.
+
+### Opening the Ports
+
+On the _EC2 Dashboard_ click on _Security groups_ and then the _Create security group_ button. Give it the name "Zookeeper" and will make it a _Custom TCP_ on outbound traffic with port range _2888-3888_ (you can also create two separate security groups for each specific port)
+
+Go back to the _Running instances_ dashboard, select each of our instances in turn, and navigate to _Actions -> Networking -> Change Security Groups_, select the security group just created, and click on _Assign Security Groups_
 
 ## Install/Configure Accumulo
 
