@@ -200,7 +200,17 @@ and try _systemctl stop zookeeper_ followed by _systemctl restart zookeeper_ (an
 
 ## Set up the Zookeeper Cluster
 
-We will now be following the preceding installation and configuration steps on the two remaining cluster nodes (_HadoopDataNode1_ and _HadoopDataNode2_) but before we get started, we will ensure that our instances type have been changed to _t2.medium_, we will need to open a couple of ports used in the communication between nodes, and of course, start the instances.
+We will now be following the preceding installation and configuration steps on the two remaining cluster nodes (_HadoopDataNode1_ and _HadoopDataNode2_) but before we get started, we will ensure that our instances type have been changed to _t2.medium_, we will need to open some ports used in the communication between nodes, and of course, start the instances.
+
+### Opening the Ports
+
+The new instance creation in AWS by default, sets up security rules for inbound SSH access (port 22) and outbound access on all TCP ports. Since we will be using the default Zookeeper ports (2181, 2888, and 3888), if we decide on locked down port security we will need to create a security group that enables inbound access rules specifically on these ports (as well as port 7 which is used for echo). Screenshot below show an example setup with restricted port but unrestricted IP access.
+
+![Security Group](images/zookeeper-rules.png)
+
+To create the security group, on the _EC2 Dashboard_ click on _Security groups_ and then the _Create security group_ button. Give it a name (i.e., Zookeeper) and optional description and save the changes (bottom right) once the rules have been added.
+
+Once done, go back to the _Running instances_ dashboard, select each of our instances in turn, and navigate to _Actions -> Networking -> Change Security Groups_, select the security group just created, and click on _Assign Security Groups_
 
 ### Edit the Configuration
 
