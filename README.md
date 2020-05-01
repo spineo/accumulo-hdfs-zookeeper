@@ -101,6 +101,16 @@ Using config: /var/applications/zookeeper/bin/../conf/zoo.cfg
 Starting zookeeper ... STARTED
 ```
 
+You can also check the status as shown below and verify the _standalone_ mode.
+```
+[zookeeper@ip-xxx-xxx-xxx-xxx zookeeper]$ ./bin/zkServer.sh status
+/bin/java
+ZooKeeper JMX enabled by default
+Using config: /var/applications/zookeeper/bin/../conf/zoo.cfg
+Client port found: 2181. Client address: localhost.
+Mode: standalone
+```
+
 We can now test connecting to our server running locally through the CLI (we can ignore most of the verbose output but if successful should see at the end a line containing _WatchedEvent state:SyncConnected_):
 ```
 ./bin/zkCli.sh -server 127.0.0.1:2181
