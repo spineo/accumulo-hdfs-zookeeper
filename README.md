@@ -300,9 +300,9 @@ cd /var/applications/zookeeper
 
 ### Start Up the HDFS Cluster (if not already up)
 
-Please refer to [this](https://github.com/spineo/hadoop-app) page for specifics, especially if the config files located under $HADOOP_HOME/etc/hadoop and ~/.ssh/config require modifications.
+Please refer to [this](https://github.com/spineo/hadoop-app) page for specifics, especially if the config files located under $HADOOP_HOME/etc/hadoop and ~/.ssh/config require modifications (usually if the Public DNS or IP values have changed)
 
-As _hadoop_ user, on the _HadoopMainNode_ the following commands:
+As _hadoop_ user, on the _HadoopMainNode_ run the following commands:
 ```
 cd /var/applications/hadoop
 ./sbin/start-all.sh
