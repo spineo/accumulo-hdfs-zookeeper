@@ -276,6 +276,40 @@ SERVER_JVMFLAGS=-Dzookeeper.4lw.commands.whitelist=mntr ./bin/zkServer.sh restar
 
 ## Install/Configure Accumulo
 
+I will not be creating an _accumulo_ user for this exercise but rather run the full installation as _root_ user (though it is probably recommended to create the dedicated user) and I will be installing the latest version available found on the official [downloads](https://accumulo.apache.org/downloads/) page.
+
+
+### Install on the Main Node
+
+Log into the _HadoopMainNode_ and run the following commands:
+```
+cd /var/applications
+wget http://us.mirrors.quenda.co/apache/accumulo/2.0.0/accumulo-2.0.0-bin.tar.gz
+tar xvf accumulo-2.0.0-bin.tar.gz
+ln -s accumulo-2.0.0 accumulo
+```
+
+### Start Up the Zookeeper Cluster (if not already up)
+
+As _zookeeper_ user, on each node run the _start_ comand followed by _status_ to ensure that service is up in cluster mode (if needed, ensure that the correct Public DNS or IP) values are coded in the _conf/zoo.cfg_ file):
+```
+cd /var/applications/zookeeper
+./bin/zkServer.sh start
+./bin/zkServer.sh status
+```
+
+### Start Up the HDFS Cluster (if not already up)
+
+Please refer to [this](https://github.com/spineo/hadoop-app) page for specifics, especially if the config files located under $HADOOP_HOME/etc/hadoop and ~/.ssh/config require modifications.
+
+As _hadoop_ user, on the _HadoopMainNode_ the following commands:
+```
+cd /var/applications/hadoop
+./sbin/start-all.sh
+```
+
+The above command will execute _start-dfs.sh_ and _start-yarn.sh_. Any problems with startup will generally be displayed in the console or logged in more detail under $HADOOP_HOME/logs. Once startup completes, you can verify that both the DFS Health UI (http://<HadoopMainNode>:50070/dfshealth.html#tab-datanode/) and the YARN UI (http://<HadoopMainNode>:8088/cluster/nodes/) render and display the two active data nodes.
+
 
 ## Run the Test Application
 
