@@ -281,3 +281,5 @@ SERVER_JVMFLAGS=-Dzookeeper.4lw.commands.whitelist=mntr ./bin/zkServer.sh restar
 
 
 ## References
+* https://zookeeper.apache.org/releases.html
+* https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-apache-zookeeper-cluster-on-ubuntu-18-04
