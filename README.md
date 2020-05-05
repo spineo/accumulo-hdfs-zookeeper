@@ -4,7 +4,10 @@ Create a storage cluster on AWS (or any other Cloud) running Apache Accumulo on 
 
 In the first part of this project we will set up a 3-node cluster to install, configure, and run Accumulo, HDFS, and Zookeeper on each node and of course, have each application communicate with each other. In doing so, we will leverage an earlier project (https://github.com/spineo/hadoop-app) I created involving 3 AWS instances (Amazon Linux t2.micro 64-bit (x86)) which we will upgrade to t2.medium to cover the additional resource utilization.
 
-In the second part of the project we will develop a simple Java client to interact directly with Accumulo/HDFS.
+In the second part of the project, we will show how to run some simple Ansible playbooks used to insure that Zookeeper, HDFS, and Accumulo are all configured correctly (i.e., using the correct Public DNS/IP values) and all cluster services are up and running.
+
+In the third part of the project we will develop a simple Java client to interact directly with Accumulo/HDFS.
+
 
 ## Change the Instance Types
 
@@ -309,6 +312,8 @@ cd /var/applications/hadoop
 ```
 
 The above command will execute _start-dfs.sh_ and _start-yarn.sh_. Any problems with startup will generally be displayed in the console or logged in more detail under $HADOOP_HOME/logs. Once startup completes, you can verify that both the DFS Health UI (http://<HadoopMainNode>:50070/dfshealth.html#tab-datanode/) and the YARN UI (http://<HadoopMainNode>:8088/cluster/nodes/) render and display the two active data nodes.
+	
+## Ansible Configuration
 
 
 ## Run the Test Application
