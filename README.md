@@ -340,7 +340,29 @@ ansible 2.9.7
 
 ### Running the Playbooks
 
+Before starting, you will need to create an _ansible_hosts_ file from the template below:
+```
+[servers]
+ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com
+ec2-xxx-xxx-xxx-xx2.compute-1.amazonaws.com
+ec2-xxx-xxx-xxx-xx3.compute-1.amazonaws.com
 
+[servers:vars]
+ansible_ssh_user=ec2-user
+ansible_ssh_private_key_file=/localpath/mykey.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+```
+
+Once done, you can test it by running _ansible servers -m ping -i ansible_hosts_ to verify that instances are up. If successful, you should output similar to the one below for each instance pinged:
+```
+ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+
+```
 
 
 ## Run the Test Application
