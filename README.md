@@ -361,7 +361,7 @@ ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com | SUCCESS => {
     }, 
     "changed": false, 
     "ping": "pong"
-
+}
 ```
 
 
