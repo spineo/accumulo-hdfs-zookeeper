@@ -1,0 +1,18 @@
+[servers]
+server1
+server2
+server3
+
+[servers:vars]
+ansible_ssh_user=ec2-user
+ansible_ssh_private_key_file=/localpath/yourkey.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# Zookeeper configuration (listed are the default ports and conf)
+#
+zk_home=/zookeeper_home
+zk_data_dir=/zookeeper_data_dir
+zk_conf=zoo.cfg
+zk_client_port=2181
+zk_peer_port=2888
+zk_leader_port=3888
