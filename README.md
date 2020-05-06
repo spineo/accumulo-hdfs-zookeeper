@@ -340,17 +340,26 @@ ansible 2.9.7
 
 ### Running the Playbooks
 
-Before starting, you will need to create an _ansible_hosts_ file from the template below:
+Before starting, you will need to create an _ansible_hosts_ file which you can modify from the _ansible/ansible_hosts.template_ checked into this repository (the server values are the Public DNS or IP):
 ```
 [servers]
-ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com
-ec2-xxx-xxx-xxx-xx2.compute-1.amazonaws.com
-ec2-xxx-xxx-xxx-xx3.compute-1.amazonaws.com
+server1
+server2
+server3
 
 [servers:vars]
 ansible_ssh_user=ec2-user
-ansible_ssh_private_key_file=/localpath/mykey.pem
+ansible_ssh_private_key_file=/localpath/yourkey.pem
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# Zookeeper configuration (listed are the default ports and conf)
+#
+zk_home=/zookeeper_home
+zk_data_dir=/zookeeper_data_dir
+zk_conf=zoo.cfg
+zk_client_port=2181
+zk_peer_port=2888
+zk_leader_port=3888
 ```
 
 Once done, you can test it by running _ansible servers -m ping -i ansible_hosts_ to verify that instances are up. If successful, you should output similar to the one below for each instance pinged:
@@ -364,6 +373,18 @@ ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com | SUCCESS => {
 }
 ```
 
+To run the _zookeeper_ playbook which ensures that the configuration contains the right hosts (and other values listed) as well as restarting the daemons on each host run below commands: 
+```
+cd ansible
+ansible-playbook zookeeper.yml -i ansible_hosts
+```
+You will see output associated with each task, but if all goes well will get a _play recap_ at the end showing the successful completion status.
+```
+PLAY RECAP *************************************************************************************************************************************************************************************
+ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
 
 ## Run the Test Application
 
