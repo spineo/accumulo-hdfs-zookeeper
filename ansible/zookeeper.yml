@@ -1,7 +1,7 @@
 - name: Zookeeper
   hosts: servers
   become: true
-  become_user: zookeeper
+  become_user: "{{ zk_user }}"
   tasks:
     - name: Ensure config file contains the correct data directory reference
       lineinfile:

@@ -1,0 +1,11 @@
+- name: Hadoop
+  hosts: servers
+  become: true
+  become_user: "{{ ha_user }}"
+  tasks:
+    - name: Ensure 'core-site.xml' contains the correct host name and port
+      lineinfile:
+        path: "{{ ha_conf }}/core-site.xml"
+        regexp: "^    <value>hdfs:"
+        line: "    <value>hdfs://{{ ha_master }}:{{ ha_hdfs_port }}</value>"
+      loop: "{{ ansible_play_hosts }}"
