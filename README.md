@@ -340,7 +340,7 @@ ansible 2.9.7
 
 ### Running the Playbooks
 
-Before starting, you will need to create an _ansible_hosts_ file which you can modify from the _ansible/ansible_hosts.template_ checked into this repository (the server values are the Public DNS or IP):
+Before starting, you will need to create an _ansible_hosts_ file which you can modify from the _ansible/inventories/ansible_hosts.template_ checked into this repository (the server values are the Public DNS or IP). You probably will not need to modify any of the _playbooks_ or _templates_ though its probably good to review them before a deployment in case you need to extend or modify the configuration.
 ```
 [servers]
 server1
@@ -354,15 +354,48 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 # Zookeeper configuration (listed are the default ports and conf)
 #
+zk_user=zookeeper
 zk_home=/zookeeper_home
 zk_data_dir=/zookeeper_data_dir
 zk_conf=zoo.cfg
 zk_client_port=2181
 zk_peer_port=2888
 zk_leader_port=3888
+
+# Hadoop/HDFS configuration
+#
+ha_master_host="{{ ansible_play_hosts[0] }}"
+ha_slaves_hosts="{{ ansible_play_hosts[1:] }}"
+ha_user=hadoop
+ha_group=hadoop
+ha_home=/hadoop_home
+ha_conf={{ ha_home }}/etc/hadoop
+
+# core-site
+#
+ha_hdfs_port=9000
+
+# hdfs-site
+#
+ha_dfs_replication=3
+ha_dfs_name_dir=/usr/local/hadoop/hdfs/data
+
+# mapred-site.xml
+#
+ha_jobtracker_port=54311
+
+# yarn-site.xml
+#
+ha_scheduler_port=8030
+ha_resource_tracker_port=8031
+
+# SSH Config
+#
+ha_ssh_dir=/home/{{ ha_user }}/.ssh
+ha_identity_file={{ ha_ssh_dir }}/id_rsa
 ```
 
-Once done, you can test it by running _ansible servers -m ping -i ansible_hosts_ to verify that instances are up. If successful, you should output similar to the one below for each instance pinged:
+Once done, you can test it by running _ansible servers -m ping -i ./inventories/ansible_hosts_ to verify that instances are up. If successful, you should output similar to the one below for each instance pinged:
 ```
 ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com | SUCCESS => {
     "ansible_facts": {
@@ -376,7 +409,7 @@ ec2-xxx-xxx-xxx-xx1.compute-1.amazonaws.com | SUCCESS => {
 To run the _zookeeper_ playbook which ensures that the configuration contains the right hosts (and other values listed) as well as restarting the daemons on each host run below commands: 
 ```
 cd ansible
-ansible-playbook zookeeper.yml -i ansible_hosts
+ansible-playbook ./playbooks/zookeeper.yml -i ./inventories/ansible_hosts
 ```
 You will see output associated with each task, but if all goes well will get a _play recap_ at the end showing the successful completion status.
 ```
@@ -384,6 +417,11 @@ PLAY RECAP *********************************************************************
 ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+Similarly to run the _hadoop_ playbook (which is primarily template driven):
+```
+ansible-playbook ./playbooks/hadoop.yml -i ./inventories/ansible_hosts
 ```
 
 ## Run the Test Application
