@@ -20,8 +20,26 @@ zk_leader_port=3888
 
 # Hadoop/HDFS configuration
 #
-ha_master=server1
+ha_master_host="{{ ansible_play_hosts[0] }}"
+ha_slaves_hosts="{{ ansible_play_hosts[1:] }}"
 ha_user=hadoop
-ha_hdfs_port=9000
 ha_home=/hadoop_home
 ha_conf={{ ha_home }}/etc/hadoop
+
+# core-site
+#
+ha_hdfs_port=9000
+
+# hdfs-site
+#
+ha_dfs_replication=3
+ha_dfs_name_dir=/usr/local/hadoop/hdfs/data
+
+# mapred-site.xml
+#
+ha_jobtracker_port=54311
+
+# yarn-site.xml
+#
+ha_scheduler_port=8030
+ha_resource_tracker_port=8031
