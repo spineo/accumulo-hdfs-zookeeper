@@ -60,3 +60,15 @@
         owner: "{{ ha_user }}"
         group: "{{ ha_group }}"
         mode: '0600'
+
+    - name: Start the Hadoop/DFS Daemon
+      delegate_to: "{{ ha_master_host }}"
+      shell:
+        cmd: ./sbin/start-dfs.sh
+        chdir: "{{ ha_home }}"
+
+    - name: Start the YARN Daemon
+      delegate_to: "{{ ha_master_host }}"
+      shell:
+        cmd: ./sbin/start-yarn.sh
+        chdir: "{{ ha_home }}"
