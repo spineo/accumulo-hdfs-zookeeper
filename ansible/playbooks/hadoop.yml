@@ -3,9 +3,51 @@
   become: true
   become_user: "{{ ha_user }}"
   tasks:
-    - name: Ensure 'core-site.xml' contains the correct host name and port
-      lineinfile:
-        path: "{{ ha_conf }}/core-site.xml"
-        regexp: "^    <value>hdfs:"
-        line: "    <value>hdfs://{{ ha_master }}:{{ ha_hdfs_port }}</value>"
-      loop: "{{ ansible_play_hosts }}"
+    - name: Template for 'core-site.xml'
+      template:
+        src: ../templates/core-site.xml
+        dest: "{{ ha_conf }}/core-site.xml"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
+
+    - name: Template for 'hdfs-site.xml'
+      template:
+        src: ../templates/hdfs-site.xml
+        dest: "{{ ha_conf }}/hdfs-site.xml"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
+
+    - name: Template for 'mapred-site.xml'
+      template:
+        src: ../templates/mapred-site.xml
+        dest: "{{ ha_conf }}/mapred-site.xml"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
+
+    - name: Template for 'yarn-site.xml'
+      template:
+        src: ../templates/yarn-site.xml
+        dest: "{{ ha_conf }}/yarn-site.xml"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
+
+    - name: Template for 'masters'
+      delegate_to: "{{ ha_master_host }}"
+      template:
+        src: ../templates/masters
+        dest: "{{ ha_conf }}/masters"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
+
+    - name: Template for 'slaves'
+      template:
+        src: ../templates/slaves
+        dest: "{{ ha_conf }}/slaves"
+        owner: hadoop
+        group: hadoop
+        mode: '0644'
