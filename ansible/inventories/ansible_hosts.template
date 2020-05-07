@@ -23,6 +23,7 @@ zk_leader_port=3888
 ha_master_host="{{ ansible_play_hosts[0] }}"
 ha_slaves_hosts="{{ ansible_play_hosts[1:] }}"
 ha_user=hadoop
+ha_group=hadoop
 ha_home=/hadoop_home
 ha_conf={{ ha_home }}/etc/hadoop
 
@@ -43,3 +44,8 @@ ha_jobtracker_port=54311
 #
 ha_scheduler_port=8030
 ha_resource_tracker_port=8031
+
+# SSH Config
+#
+ha_ssh_dir=/home/{{ ha_user }}/.ssh
+ha_identity_file={{ ha_ssh_dir }}/id_rsa

@@ -51,3 +51,12 @@
         owner: "{{ ha_user }}"
         group: "{{ ha_group }}"
         mode: '0644'
+
+    - name: Template for the SSH 'config' file
+      delegate_to: "{{ ha_master_host }}"
+      template:
+        src: ../templates/ssh_config
+        dest: "{{ ha_ssh_dir }}/config"
+        owner: "{{ ha_user }}"
+        group: "{{ ha_group }}"
+        mode: '0600'
