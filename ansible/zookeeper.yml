@@ -8,14 +8,12 @@
         path: "{{ zk_home }}/conf/{{ zk_conf }}"
         regexp: "^dataDir=.*"
         line: "dataDir={{ zk_data_dir }}"
-      loop: "{{ ansible_play_hosts }}"
 
     - name: Ensure config file contains the correct client port
       lineinfile:
         path: "{{ zk_home }}/conf/{{ zk_conf }}"
         regexp: "^clientPort=.*"
         line: "clientPort={{ zk_client_port }}"
-      loop: "{{ ansible_play_hosts }}"
 
     - name: Ensure config file contains the correct servers on each host
       lineinfile:
