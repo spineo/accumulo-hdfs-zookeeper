@@ -340,7 +340,7 @@ ansible 2.9.7
 
 ### Running the Playbooks
 
-Before starting, you will need to create an _ansible_hosts_ file which you can modify from the _ansible/inventories/ansible_hosts.template_ checked into this repository (the server values are the Public DNS or IP). You probably will not need to modify any of the _playbooks_ or _templates_ though its probably good to review them before a deployment in case you need to extend or modify the configuration.
+Before starting, you will need to create an _ansible_hosts_ (or whatever name you choose) inventory file which you can copy/modify from the _ansible/inventories/ansible_hosts.template_ checked into this repository (the server values are the Public DNS or IP). You probably will not need to modify any of the _playbooks_ or _templates_ though its probably good to review them before a deployment in case you need to extend or modify the configuration.
 ```
 [servers]
 server1
@@ -419,7 +419,7 @@ ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0
 ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Similarly to run the _hadoop_ playbook (which is primarily template driven):
+Similarly to run the _hadoop_ playbook (which is primarily template driven) execute:
 ```
 ansible-playbook ./playbooks/hadoop.yml -i ./inventories/ansible_hosts
 ```
