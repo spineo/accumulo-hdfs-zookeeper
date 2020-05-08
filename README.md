@@ -375,7 +375,21 @@ instance.name=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com
 ## Zookeeper connection information for Accumulo instance
 instance.zookeepers=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,...
 ```
-	
+
+Set the Authentication properties (I left the default _password_ for 'auth.type' and created the _accumulo_ user):
+```
+## Authentication properties
+## --------------
+## Authentication method (i.e password, kerberos, PasswordToken, KerberosToken, etc)
+auth.type=password
+
+## Accumulo principal/username for chosen authentication method
+auth.principal=accumulo
+
+## Authentication token (ex. mypassword, /path/to/keytab)
+auth.token=******
+```
+
 ## Ansible Configuration: Automated Configuration/Start-up of Zookeeper, Hadoop, and Accumulo
 
 The Ansible Playbooks will be run from a _control_ server (in my case, a MacBook Pro) that is _ssh_ enabled. They are of course checked into this git repository under the _ansible_ directory.
