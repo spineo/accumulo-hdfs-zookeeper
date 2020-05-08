@@ -340,6 +340,41 @@ If it fails, edit the _$ACCUMULO_HOME/conf/accumulo.properties_ to contain the b
 ## Set to false if 'accumulo-util build-native' fails
 tserver.memory.maps.native.enabled=false
 ```
+
+In addition, set the following properties:
+```
+## Sets location in HDFS where Accumulo will store data
+instance.volumes=hdfs://ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:8020/accumulo
+
+## Sets location of Zookeepers
+instance.zookeeper.host=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,...
+```
+
+Update these variables in the _accumulo_env.sh_:
+
+```
+############################
+# Variables that must be set
+############################
+
+## Accumulo logs directory. Referenced by logger config.
+export ACCUMULO_LOG_DIR="${ACCUMULO_LOG_DIR:-${basedir}/logs}"
+## Hadoop installation
+export HADOOP_HOME="${HADOOP_HOME:-/path/to/hadoop}"
+## Hadoop configuration
+export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-${HADOOP_HOME}/etc/hadoop}"
+## Zookeeper installation
+export ZOOKEEPER_HOME="${ZOOKEEPER_HOME:-/path/to/zookeeper}"
+```
+
+Update the _accumulo-client.properties_ to include:
+```
+## Name of Accumulo instance to connect to
+instance.name=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com
+
+## Zookeeper connection information for Accumulo instance
+instance.zookeepers=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,...
+```
 	
 ## Ansible Configuration: Automated Configuration/Start-up of Zookeeper, Hadoop, and Accumulo
 
@@ -460,3 +495,4 @@ The hadoop playbook not only overwrites the configuration files listed in the pl
 ## References
 * https://zookeeper.apache.org/releases.html
 * https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-apache-zookeeper-cluster-on-ubuntu-18-04
+* https://accumulo.apache.org/docs/2.x/getting-started/quickstart
