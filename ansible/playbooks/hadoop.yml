@@ -61,14 +61,42 @@
         group: "{{ ha_group }}"
         mode: '0600'
 
-    - name: Start the Hadoop/DFS Daemon
+    - name: "Add the SSH Public Key to 'known_hosts' (if not already there) on '{{ ha_master_host }}'"
       delegate_to: "{{ ha_master_host }}"
       shell:
-        cmd: ./sbin/start-dfs.sh
+        cmd: "[ `grep -c ec2-3-83-205-150.compute-1.amazonaws.com ~/.ssh/known_hosts` -eq 0 ] && \
+             ssh -o 'StrictHostKeyChecking no' {{ ha_master_host }} \
+             cat {{ ha_ssh_dir }}/id_rsa.pub >> {{ ha_ssh_dir }}/known_hosts"
         chdir: "{{ ha_home }}"
 
-    - name: Start the YARN Daemon
+    # If not running, it will still return status code 0
+    #
+    - name: "Stop the Hadoop/DFS Daemon on '{{ ha_master_host }}'"
       delegate_to: "{{ ha_master_host }}"
       shell:
-        cmd: ./sbin/start-yarn.sh
-        chdir: "{{ ha_home }}"
+        cmd: ./stop-dfs.sh
+        chdir: "{{ ha_home }}/sbin"
+
+    # Web UI can be accessed on the master node port 50070
+    #
+    - name: "Start the Hadoop/DFS Daemon on '{{ ha_master_host }}'"
+      delegate_to: "{{ ha_master_host }}"
+      shell:
+        cmd: ./start-dfs.sh
+        chdir: "{{ ha_home }}/sbin"
+
+    # If not running, it will still return status code 0
+    #
+    - name: "Stop the YARN Daemon on '{{ ha_master_host }}'"
+      delegate_to: "{{ ha_master_host }}"
+      shell:
+        cmd: ./stop-yarn.sh
+        chdir: "{{ ha_home }}/sbin"
+
+    # Web UI can be accessed on the master node port 8088
+    #
+    - name: "Start the YARN Daemon on '{{ ha_master_host }}'"
+      delegate_to: "{{ ha_master_host }}"
+      shell:
+        cmd: ./start-yarn.sh
+        chdir: "{{ ha_home }}/sbin"
