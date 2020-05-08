@@ -313,7 +313,35 @@ cd /var/applications/hadoop
 
 The above command will execute _start-dfs.sh_ and _start-yarn.sh_. Any problems with startup will generally be displayed in the console or logged in more detail under $HADOOP_HOME/logs. Once startup completes, you can verify that both the DFS Health UI (http://<HadoopMainNode>:50070/dfshealth.html#tab-datanode/) and the YARN UI (http://<HadoopMainNode>:8088/cluster/nodes/) render and display the two active data nodes.
 	
-## Ansible Configuration
+### Create the 'accumulo' User and Set Directory Ownership
+
+```
+sudo useradd accumulo -m
+cd /var/applications
+sudo chown -R accumulo.accumulo accumulo-2.0.0
+```
+
+### Install the Java Devel JDK (1.8)
+```
+sudo yum install java-1.8.0-openjdk-devel.x86_64
+```
+and then, as user _accumulo_, add the following to the _~/.bashrc_ (and run _source ~/.bashrc_ after):
+```
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64
+export PATH=$JAVA_HOME/bin:$PATH
+```
+
+### Configure Accumulo
+
+In _$ACCUMULO_HOME/bin_ (as _accumulo_ user) run the command _./accumulo-util build-native_
+
+If it fails, edit the _$ACCUMULO_HOME/conf/accumulo.properties_ to contain the below setting:
+```
+## Set to false if 'accumulo-util build-native' fails
+tserver.memory.maps.native.enabled=false
+```
+	
+## Ansible Configuration: Automated Configuration/Start-up of Zookeeper, Hadoop, and Accumulo
 
 The Ansible Playbooks will be run from a _control_ server (in my case, a MacBook Pro) that is _ssh_ enabled. They are of course checked into this git repository under the _ansible_ directory.
 
