@@ -35,7 +35,7 @@
         group: "{{ ha_group }}"
         mode: '0644'
 
-    - name: Template for 'masters'
+    - name: "Template for 'masters', file added only to '{{ ha_master_host }}'"
       delegate_to: "{{ ha_master_host }}"
       template:
         src: ../templates/masters
@@ -64,7 +64,7 @@
     - name: "Add the SSH Public Key to 'known_hosts' (if not already there) on '{{ ha_master_host }}'"
       delegate_to: "{{ ha_master_host }}"
       shell:
-        cmd: "[ `grep -c ec2-3-83-205-150.compute-1.amazonaws.com ~/.ssh/known_hosts` -eq 0 ] && \
+        cmd: "[ `grep -c {{ ha_master_host }} ~/.ssh/known_hosts` -eq 0 ] && \
              ssh -o 'StrictHostKeyChecking no' {{ ha_master_host }} \
              cat {{ ha_ssh_dir }}/id_rsa.pub >> {{ ha_ssh_dir }}/known_hosts"
         chdir: "{{ ha_home }}"
