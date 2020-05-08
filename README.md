@@ -424,6 +424,8 @@ Similarly to run the _hadoop_ playbook (which is primarily template driven) exec
 ansible-playbook ./playbooks/hadoop.yml -i ./inventories/ansible_hosts
 ```
 
+The hadoop playbook not only overwrites the configuration files listed in the playbook but also sets up the SSH configuration and executes the commands to stop/start DFS and YARN.
+
 ## Run the Test Application
 
 
