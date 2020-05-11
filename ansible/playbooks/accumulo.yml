@@ -11,3 +11,12 @@
         owner: "{{ ac_user }}"
         group: "{{ ac_group }}"
         mode: '0644'
+
+    - name: Template for 'accumulo-client.properties'
+      delegate_to: "{{ ac_master_host }}"
+      template:
+        src: ../templates/accumulo-client.properties
+        dest: "{{ ac_conf }}/accumulo-client.properties"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
