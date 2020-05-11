@@ -1,0 +1,13 @@
+- name: Accumulo
+  hosts: servers
+  become: true
+  become_user: "{{ ac_user }}"
+  tasks:
+    - name: Template for 'accumulo.properties'
+      delegate_to: "{{ ac_master_host }}"
+      template:
+        src: ../templates/accumulo.properties
+        dest: "{{ ac_conf }}/accumulo.properties"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
