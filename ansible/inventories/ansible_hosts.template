@@ -69,3 +69,4 @@ ac_trace_password=secret
 ac_auth_type=password
 ac_auth_principal=accumulo
 ac_auth_token=accumulo
+ac_java_home=your_java_installation

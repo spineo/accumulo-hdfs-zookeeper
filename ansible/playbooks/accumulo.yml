@@ -20,3 +20,12 @@
         owner: "{{ ac_user }}"
         group: "{{ ac_group }}"
         mode: '0644'
+
+    - name: Template for 'bashrc'
+      delegate_to: "{{ ac_master_host }}"
+      template:
+        src: ../templates/ac_bashrc
+        dest: "/home/{{ ac_user }}/.bashrc"
+        owner: "{{ ac_user }}"
+        group: "{{ ac_group }}"
+        mode: '0644'
