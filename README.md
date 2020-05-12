@@ -503,6 +503,15 @@ ansible-playbook ./playbooks/hadoop.yml -i ./inventories/ansible_hosts
 
 The hadoop playbook not only overwrites the configuration files listed in the playbook but also sets up the SSH configuration and executes the commands to stop/start DFS and YARN.
 
+
+To run the _accumulo_ playbook execute:
+```
+ansible-playbook ./playbooks/accumulo.yml -i ./inventories/ansible_hosts
+```
+
+For now, this playbook only configures the _accumulo.properties_, _accumulo-client.properties_ and initializes the _accumulo_ user _.bashrc_ (all functionality template driven)
+
+
 ## Run the Test Application
 
 
