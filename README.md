@@ -217,9 +217,7 @@ We will now be following the preceding installation and configuration steps on t
 
 ### Opening the Ports
 
-The new instance creation in AWS by default, sets up security rules for inbound SSH access (port 22) and outbound access on all TCP ports. Since we will be using the default Zookeeper ports (2181, 2888, and 3888), if we decide on locked down port security we will need to create a security group that enables inbound access rules specifically on these ports (as well as port 7 which is used for echo). Screenshot below shows an example setup with restricted port but unrestricted IP access.
-
-![Security Group](images/zookeeper-rules.png)
+The new instance creation in AWS by default, sets up security rules for inbound SSH access (port 22) and outbound access on all TCP ports. Since we will be using the default Zookeeper ports (2181, 2888, and 3888), if we decide on locked down port/address security we will need to create a security group that enables inbound access rules specifically on these ports (as well as port 7 which is used by "echo") and '/32' addresses for the local machine/cluster (currently an Ansible playbook does this dynamically)
 
 To create the security group, on the _EC2 Dashboard_ click on _Security groups_ and then the _Create security group_ button. Give it a name (i.e., Zookeeper) and optional description and save the changes (bottom right) once the rules have been added.
 
