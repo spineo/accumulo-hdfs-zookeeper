@@ -225,11 +225,11 @@ Then go back to the _Running instances_ dashboard and for each of our instances,
 
 ### Edit the Configuration
 
-Once we get to the section where we edit the _zoo.cfg_ file, we will add the below three lines to all of them (including the main node one). The server value can be the public DNS or IP.
+Once we get to the section where we edit the _zoo.cfg_ file, we will add the below three lines to all of them (including the main node one). The server should preferably be the private ip.
 ```
-server.1=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
-server.2=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888
-server.3=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2888:3888  
+server.1=xxx.xxx.xxx.xxx:2888:3888
+server.2=xxx.xxx.xxx.xxx:2888:3888
+server.3=xxx.xxx.xxx.xxx:2888:3888 
 ```
 
 Then on each node create a _/data/zookeeper/myid_ file containing the server number associated with that node (i.e., on server.1 node the myid file would contain the number _1_).
