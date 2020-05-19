@@ -8,6 +8,8 @@ In the second part of the project, we will show how to run some simple Ansible p
 
 In the third part of the project we will develop a simple Java client to interact directly with Accumulo/HDFS.
 
+Note that, as an extra precaution, I have ultimately decided that all applications in this cluster are configured to use the _Private DNS Name_. In addition, I have set up SSH tunnels on my /32 network mask for viewing the Web applications instead of exposing the public DNS names and ports (the security group generated dynamically with Ansible is discussed [here[(https://github.com/spineo/ansible-aws-instance)
+
 
 ## Change the Instance Types
 
