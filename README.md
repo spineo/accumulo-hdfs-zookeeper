@@ -432,6 +432,27 @@ To stop the tserver:
 ./accumulo-service tserver stop
 ```
 
+Next run:
+```
+accumulo-cluster create-config
+```
+
+This will create the following configuration files under _$ACCUMULO_HOME/conf_ (all, for now pointing to _localhost_):
+```
+* masters : Accumulo primary coordinating process. Must specify one node. Can specify a few for fault tolerance.
+* gc : Accumulo garbage collector. Must specify one node. Can specify a few for fault tolerance.
+* monitor : Node where Accumulo monitoring web server is run.
+* tservers : Accumulo worker processes. List all of the nodes where tablet servers should run in this file.
+* tracers : Optional capability. Can specify zero or more nodes.
+```
+
+Since we have our cluster configured, we can add our master (i.e., _HadoopMainNode_) node private DNS name to all files and add the remaining cluster nodes private DNS names to the _tservers_ file.
+
+Start the cluster by running:
+```
+./accumulo-cluster start
+```
+Which will start the _masters_, _gc_, _monitor_, and _tservers_ applications (you can confirm by running _ps -ef | grep application=_ as there isn't a "status" command that I know of).
 
 ## Ansible Configuration: Automated AccumuloConfiguration/Start-up of Zookeeper, Hadoop, and Accumulo
 
