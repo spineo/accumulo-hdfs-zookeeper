@@ -8,6 +8,8 @@ In the second part of the project, we will show how to run some simple Ansible p
 
 In the third part of the project we will develop a simple Java client to interact directly with Accumulo/HDFS.
 
+Note that, as an extra precaution, I have ultimately decided that all applications in this cluster should be configured to use the _Private DNS Names_. In addition, I have set up SSH tunnels on my /32 network mask for viewing the Web applications instead of exposing the public DNS names and ports (the security group generated dynamically with Ansible is discussed [here](https://github.com/spineo/ansible-aws-instance))
+
 
 ## Change the Instance Types
 
@@ -312,7 +314,6 @@ cd /var/applications/hadoop
 The above command will execute _start-dfs.sh_ and _start-yarn.sh_. Any problems with startup will generally be displayed in the console or logged in more detail under $HADOOP_HOME/logs. Once startup completes, you can verify that both the DFS Health UI (http://<HadoopMainNode>:50070/dfshealth.html#tab-datanode/) and the YARN UI (http://<HadoopMainNode>:8088/cluster/nodes/) render and display the two active data nodes.
 	
 ### Create the 'accumulo' User and Set Directory Ownership
-
 ```
 sudo useradd accumulo -m
 cd /var/applications
@@ -342,7 +343,7 @@ tserver.memory.maps.native.enabled=false
 In addition, set the following properties:
 ```
 ## Sets location in HDFS where Accumulo will store data
-instance.volumes=hdfs://ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:8020/accumulo
+instance.volumes=hdfs://ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:9000/accumulo
 
 ## Sets location of Zookeepers
 instance.zookeeper.host=ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com:2181,...
@@ -387,6 +388,71 @@ auth.principal=accumulo
 ## Authentication token (ex. mypassword, /path/to/keytab)
 auth.token=******
 ```
+
+### Set up the HDFS Directory for Accumulo
+
+When running _./accumulo init_ (next step) you may run into HDFS permission issues when creating the 'accumulo' directory (which corresponds to the instance name below). One fix is by running the commands below as the _hadoop_ user:
+```
+hadoop fs -mkdir /accumulo
+hadoop fs -chown accumulo /accumulo
+```
+
+### Initialize Accumulo
+
+On the Accumulo master host, run the below commands:
+```
+cd $ACCUMULO_HOME/bin
+./accumulo init
+```
+
+At the prompts, enter the following:
+```
+Instance name : accumulo
+Enter initial password for root: ********
+Confirm initial password for root: ********
+```
+
+### Test the Accumulo Services
+
+Run the command below to test the _tserver_ (and CTRL-C to quit):
+```
+cd $ACCUMULO_HOME/bin
+./accumulo tserver
+```
+
+In the same directory, run the command below to start the tserver:
+```
+./accumulo-service tserver start
+```
+
+You can then verify that this command is running (i.e., _ps -ef | grep tserver_)
+
+To stop the tserver:
+```
+./accumulo-service tserver stop
+```
+
+Next run:
+```
+accumulo-cluster create-config
+```
+
+This will create the following configuration files under _$ACCUMULO_HOME/conf_ (all, for now pointing to _localhost_):
+```
+* masters : Accumulo primary coordinating process. Must specify one node. Can specify a few for fault tolerance.
+* gc : Accumulo garbage collector. Must specify one node. Can specify a few for fault tolerance.
+* monitor : Node where Accumulo monitoring web server is run.
+* tservers : Accumulo worker processes. List all of the nodes where tablet servers should run in this file.
+* tracers : Optional capability. Can specify zero or more nodes.
+```
+
+Since we have our cluster configured, we can add our master (i.e., _HadoopMainNode_) node private DNS name to all files and add the remaining cluster nodes private DNS names to the _tservers_ file.
+
+Start the cluster by running:
+```
+./accumulo-cluster start
+```
+Which will start the _masters_, _gc_, _monitor_, and _tservers_ applications (you can confirm by running _ps -ef | grep application=_ as there isn't a "status" command that I know of).
 
 ## Ansible Configuration: Automated AccumuloConfiguration/Start-up of Zookeeper, Hadoop, and Accumulo
 
