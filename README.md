@@ -454,6 +454,10 @@ Start the cluster by running:
 ```
 Which will start the _masters_, _gc_, _monitor_, and _tservers_ applications (you can confirm by running _ps -ef | grep application=_ as there isn't a "status" command that I know of).
 
+The Accumulo Monitor UI can be accessed on port 9995 by default (I set up an SSH tunnel so public DNS/port need not be open). As with the Hadoop/YARN UI's, you can link to other active datanodes (in this case our defined tablet servers) as shown in the screenshot below.
+
+![Accumulo Monitor Tablets](images/accumulo_monitor_tablets.png)
+
 ## Ansible Configuration: Automated AccumuloConfiguration/Start-up of Zookeeper, Hadoop, and Accumulo
 
 This Ansible is now part of the https://github.com/spineo/ansible-aws-instance repository. Please review the [README](https://github.com/spineo/ansible-aws-instance/blob/master/README.md) in that repository for more details including Ansible installation/setup.
