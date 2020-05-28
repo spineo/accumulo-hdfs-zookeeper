@@ -460,7 +460,7 @@ The Accumulo Monitor UI can be accessed on port 9995 by default (I set up an SSH
 
 ## Ansible Configuration: Automated AccumuloConfiguration/Start-up of Zookeeper, Hadoop, and Accumulo
 
-This Ansible is now part of the https://github.com/spineo/ansible-aws-instance repository. Please review the [README](https://github.com/spineo/ansible-aws-instance/blob/master/README.md) in that repository for more details including Ansible installation/setup.
+This Ansible is now part of the https://github.com/spineo/ansible-aws-instance/ repository. Please review the [Ansible AWS Instance](https://spineo.github.io/ansible-aws-instance/) documentation for more details including Ansible installation/setup.
 
 
 ## Run the Test Application
